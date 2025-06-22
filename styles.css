@@ -125,6 +125,12 @@ body {
     max-height: min(450px, 60vh);
     touch-action: none;
     -webkit-touch-callout: none;
+    transition: transform 0.1s ease;
+}
+
+.game-container.touching {
+    transform: scale(0.98);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .grid-container {
@@ -349,6 +355,10 @@ body {
     line-height: 1.4;
 }
 
+.mobile-instructions {
+    display: none;
+}
+
 .restart-button {
     display: block;
     width: 100%;
@@ -518,6 +528,14 @@ body {
     .instructions p {
         font-size: 0.85rem;
         margin-bottom: 4px;
+    }
+    
+    .desktop-instructions {
+        display: none;
+    }
+    
+    .mobile-instructions {
+        display: block;
     }
     
     .restart-button {

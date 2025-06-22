@@ -27,12 +27,85 @@ class ColorOperations2048 {
     }
 
     addEventListeners() {
+        // Keyboard controls
         document.addEventListener('keydown', (e) => {
             if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
                 e.preventDefault();
                 this.handleMove(e.key);
             }
         });
+
+        // Touch controls for mobile
+        if (this.isMobileDevice()) {
+            this.addTouchControls();
+        }
+    }
+
+    isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+               ('ontouchstart' in window) ||
+               (navigator.maxTouchPoints > 0);
+    }
+
+    addTouchControls() {
+        let startX = 0;
+        let startY = 0;
+        let endX = 0;
+        let endY = 0;
+        const minSwipeDistance = 30;
+
+        const gameContainer = this.tileContainer.parentElement;
+
+        gameContainer.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            
+            // Add visual feedback
+            gameContainer.classList.add('touching');
+        }, { passive: false });
+
+        gameContainer.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+
+        gameContainer.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            const touch = e.changedTouches[0];
+            endX = touch.clientX;
+            endY = touch.clientY;
+
+            // Remove visual feedback
+            gameContainer.classList.remove('touching');
+
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            const absDeltaX = Math.abs(deltaX);
+            const absDeltaY = Math.abs(deltaY);
+
+            // Check if swipe distance is significant enough
+            if (absDeltaX < minSwipeDistance && absDeltaY < minSwipeDistance) {
+                return;
+            }
+
+            // Determine swipe direction
+            if (absDeltaX > absDeltaY) {
+                // Horizontal swipe
+                if (deltaX > 0) {
+                    this.handleMove('ArrowRight');
+                } else {
+                    this.handleMove('ArrowLeft');
+                }
+            } else {
+                // Vertical swipe
+                if (deltaY > 0) {
+                    this.handleMove('ArrowDown');
+                } else {
+                    this.handleMove('ArrowUp');
+                }
+            }
+        }, { passive: false });
     }
 
     getRandomOperation() {
