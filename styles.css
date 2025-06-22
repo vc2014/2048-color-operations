@@ -8,31 +8,48 @@ body {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #333;
-    min-height: 100vh;
+    height: 100vh;
+    height: 100dvh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    overflow-y: auto;
+    padding: 5px;
+    -webkit-overflow-scrolling: touch;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
 }
 
 .container {
-    max-width: 500px;
-    margin: 20px;
+    max-width: min(500px, 95vw);
+    width: 100%;
+    max-height: calc(100vh - 10px);
+    max-height: calc(100dvh - 10px);
+    margin: 0 auto;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
-    padding: 30px;
+    padding: 15px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
 }
 
 .header h1 {
-    font-size: 2.5rem;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
     font-weight: bold;
     color: #2c3e50;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 .score-container {
@@ -62,8 +79,9 @@ body {
 }
 
 .legend {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .legend h3 {
@@ -98,8 +116,15 @@ body {
     background: #bbada0;
     border-radius: 10px;
     padding: 10px;
-    margin: 20px 0;
+    margin: 12px 0;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: min(450px, 60vh);
+    touch-action: none;
+    -webkit-touch-callout: none;
 }
 
 .grid-container {
@@ -151,6 +176,9 @@ body {
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
     pointer-events: auto;
     z-index: 10;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .tile-number {
@@ -308,11 +336,12 @@ body {
 
 .instructions {
     text-align: center;
-    margin: 20px 0;
-    padding: 15px;
+    margin: 12px 0 8px 0;
+    padding: 10px;
     background: rgba(52, 152, 219, 0.1);
     border-radius: 8px;
     border-left: 4px solid #3498db;
+    flex-shrink: 0;
 }
 
 .instructions p {
@@ -323,7 +352,7 @@ body {
 .restart-button {
     display: block;
     width: 100%;
-    padding: 15px;
+    padding: 12px;
     background: #e74c3c;
     color: white;
     border: none;
@@ -332,6 +361,11 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: background 0.2s ease;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 44px;
 }
 
 .restart-button:hover {
@@ -344,25 +378,112 @@ body {
 
 .footer {
     text-align: center;
-    margin-top: 20px;
-    padding-top: 15px;
+    margin-top: 8px;
+    padding-top: 8px;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.github-star {
+    margin-bottom: 12px;
+}
+
+.star-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #24292e, #1a1d21);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(36, 41, 46, 0.3);
+    border: 1px solid #444d56;
+}
+
+.star-button:hover {
+    background: linear-gradient(135deg, #2f363d, #24292e);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(36, 41, 46, 0.4);
+}
+
+.star-button:active {
+    transform: translateY(-1px);
+}
+
+.star-icon {
+    font-size: 1.1rem;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+.star-text {
+    font-weight: 600;
+}
+
+@keyframes sparkle {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
 }
 
 .footer p {
     font-size: 0.9rem;
     color: #7f8c8d;
-    margin: 0;
+    margin: 2px 0;
 }
 
 @media (max-width: 600px) {
+    body {
+        padding: 2px;
+    }
+    
     .container {
-        margin: 10px;
-        padding: 20px;
+        margin: 0;
+        padding: 12px;
+        max-height: calc(100vh - 4px);
+        max-height: calc(100dvh - 4px);
+        border-radius: 10px;
+    }
+    
+    .header {
+        margin-bottom: 8px;
     }
     
     .header h1 {
-        font-size: 2rem;
+        font-size: clamp(1.3rem, 6vw, 1.8rem);
+        margin-bottom: 6px;
+    }
+    
+    .score-container {
+        gap: 12px;
+    }
+    
+    .score-box {
+        padding: 6px 12px;
+        min-width: 60px;
+    }
+    
+    .score-label {
+        font-size: 0.7rem;
+    }
+    
+    .score {
+        font-size: 1.2rem;
+    }
+    
+    .legend {
+        margin-bottom: 8px;
+    }
+    
+    .legend h3 {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
     }
     
     .grid-cell, .tile {
@@ -377,6 +498,8 @@ body {
     
     .game-container {
         padding: 8px;
+        margin: 8px 0;
+        max-height: min(350px, 50vh);
     }
     
     .tile-number {
@@ -387,8 +510,160 @@ body {
         font-size: 0.8rem;
     }
     
+    .instructions {
+        margin: 8px 0 6px 0;
+        padding: 8px;
+    }
+    
+    .instructions p {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+    }
+    
+    .restart-button {
+        padding: 12px;
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+    
+    .footer {
+        margin-top: 6px;
+        padding-top: 6px;
+    }
+    
+    .footer p {
+        font-size: 0.8rem;
+    }
+    
+    .github-star {
+        margin-bottom: 10px;
+    }
+    
+    .star-button {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        gap: 6px;
+    }
+    
+    .star-icon {
+        font-size: 1rem;
+    }
+    
     .legend-items {
         flex-direction: column;
         align-items: center;
+        gap: 6px;
+    }
+    
+    .legend-item {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+        border-radius: 8px;
+    }
+    
+    .header h1 {
+        font-size: clamp(1.2rem, 7vw, 1.6rem);
+    }
+    
+    .score-box {
+        padding: 5px 10px;
+        min-width: 55px;
+    }
+    
+    .grid-cell, .tile {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .grid-row {
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+    
+    .game-container {
+        padding: 6px;
+        max-height: min(300px, 45vh);
+    }
+    
+    .tile-number {
+        font-size: 1.2rem;
+    }
+    
+    .tile-symbol {
+        font-size: 0.7rem;
+    }
+    
+    .instructions p {
+        font-size: 0.8rem;
+    }
+    
+    .restart-button {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+    
+    .footer p {
+        font-size: 0.75rem;
+    }
+    
+    .star-button {
+        padding: 7px 14px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-height: 600px) {
+    .container {
+        padding: 8px;
+        max-height: calc(100vh - 2px);
+        max-height: calc(100dvh - 2px);
+    }
+    
+    .header {
+        margin-bottom: 6px;
+    }
+    
+    .header h1 {
+        margin-bottom: 4px;
+    }
+    
+    .legend {
+        margin-bottom: 6px;
+    }
+    
+    .legend h3 {
+        font-size: 0.8rem;
+        margin-bottom: 4px;
+    }
+    
+    .game-container {
+        margin: 6px 0;
+        max-height: 40vh;
+    }
+    
+    .instructions {
+        margin: 6px 0 4px 0;
+        padding: 6px;
+    }
+    
+    .instructions p {
+        font-size: 0.75rem;
+        margin-bottom: 2px;
+    }
+    
+    .restart-button {
+        padding: 8px;
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+    }
+    
+    .footer {
+        margin-top: 4px;
+        padding-top: 4px;
     }
 }

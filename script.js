@@ -322,11 +322,11 @@ class ColorOperations2048 {
         popup.textContent = `${tile1.value} ${operationSymbols[operation]} ${tile2.value} = ${result}`;
         
         // Calculate position based on where the merge happened
-        // Position relative to tile container (which has 10px padding)
         let left, top;
         if (row !== null && col !== null) {
-            left = col * 100 + 55; // Center of tile (10px padding + 90px/2 tile width)
-            top = row * 100 + 55;  // Center of tile (10px padding + 90px/2 tile height)
+            const { tileSize, gap } = this.getTilePositioning();
+            left = col * (tileSize + gap) + gap + tileSize / 2;
+            top = row * (tileSize + gap) + gap + tileSize / 2;
         } else {
             // Fallback to center of game area
             left = 200;
@@ -351,10 +351,25 @@ class ColorOperations2048 {
         }, 1000);
     }
 
+    getTilePositioning() {
+        // Determine tile size and gap based on screen width
+        const screenWidth = window.innerWidth;
+        
+        if (screenWidth <= 480) {
+            return { tileSize: 60, gap: 6 };
+        } else if (screenWidth <= 600) {
+            return { tileSize: 70, gap: 8 };
+        } else {
+            return { tileSize: 90, gap: 10 };
+        }
+    }
+
     render() {
         // Clear only tiles, not popups
         const existingTiles = this.tileContainer.querySelectorAll('.tile');
         existingTiles.forEach(tile => tile.remove());
+        
+        const { tileSize, gap } = this.getTilePositioning();
         
         for (let row = 0; row < 4; row++) {
             for (let col = 0; col < 4; col++) {
@@ -363,8 +378,11 @@ class ColorOperations2048 {
                     const tileElement = document.createElement('div');
                     tileElement.className = `tile ${tile.operation}`;
                     tileElement.setAttribute('data-value', tile.value);
-                    tileElement.style.left = `${col * 100 + 10}px`;
-                    tileElement.style.top = `${row * 100 + 10}px`;
+                    
+                    const left = col * (tileSize + gap) + gap;
+                    const top = row * (tileSize + gap) + gap;
+                    tileElement.style.left = `${left}px`;
+                    tileElement.style.top = `${top}px`;
                     
                     // Create content with number and relevant operation symbol
                     const numberElement = document.createElement('div');
