@@ -249,18 +249,20 @@ class ColorOperations2048 {
         const op1 = tile1.operation;
         const op2 = tile2.operation;
         
-        // Special rules for tile 1: can merge with any other tile using multiplication/division
+        // Special rules for tile 1 with non-1 tiles: only if dominant operation is multiplication/division
         if (value1 === 1 && value2 !== 1) {
-            return op1 === 'multiplication' || op1 === 'division' || op2 === 'multiplication' || op2 === 'division';
+            const dominantOp = this.getDominantOperation(tile1, tile2);
+            return dominantOp === 'multiplication' || dominantOp === 'division';
         }
         if (value2 === 1 && value1 !== 1) {
-            return op1 === 'multiplication' || op1 === 'division' || op2 === 'multiplication' || op2 === 'division';
+            const dominantOp = this.getDominantOperation(tile1, tile2);
+            return dominantOp === 'multiplication' || dominantOp === 'division';
         }
         
-        // Special rules for tile 1 + tile 1: can use multiplication/division/addition
+        // Special rules for tile 1 + tile 1: only if dominant operation is addition/subtraction
         if (value1 === 1 && value2 === 1) {
-            return op1 === 'multiplication' || op1 === 'division' || op1 === 'addition' || 
-                   op2 === 'multiplication' || op2 === 'division' || op2 === 'addition';
+            const dominantOp = this.getDominantOperation(tile1, tile2);
+            return dominantOp === 'addition' || dominantOp === 'subtraction';
         }
         
         // Regular rule: tiles with same value can merge
@@ -272,6 +274,38 @@ class ColorOperations2048 {
             return tile1.operation;
         }
         return tile2.operation;
+    }
+
+    getRelevantOperationSymbol(tile) {
+        const operationSymbols = {
+            'addition': '+',
+            'subtraction': '−',
+            'multiplication': '×',
+            'division': '÷',
+            'neutral': ''
+        };
+
+        // Always show the tile's own operation (the dominant one when it merges)
+        return operationSymbols[tile.operation];
+    }
+
+    hasMergeableAdjacent(tile, row, col) {
+        const adjacentPositions = [
+            { row: row - 1, col: col }, // up
+            { row: row + 1, col: col }, // down
+            { row: row, col: col - 1 }, // left
+            { row: row, col: col + 1 }  // right
+        ];
+
+        for (const pos of adjacentPositions) {
+            if (pos.row >= 0 && pos.row < 4 && pos.col >= 0 && pos.col < 4) {
+                const adjacentTile = this.grid[pos.row][pos.col];
+                if (adjacentTile && this.canMerge(tile, adjacentTile)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     showOperationPopup(tile1, tile2, result, operation, row = null, col = null) {
@@ -328,10 +362,30 @@ class ColorOperations2048 {
                 if (tile) {
                     const tileElement = document.createElement('div');
                     tileElement.className = `tile ${tile.operation}`;
-                    tileElement.textContent = tile.value;
                     tileElement.setAttribute('data-value', tile.value);
                     tileElement.style.left = `${col * 100 + 10}px`;
                     tileElement.style.top = `${row * 100 + 10}px`;
+                    
+                    // Create content with number and relevant operation symbol
+                    const numberElement = document.createElement('div');
+                    numberElement.className = 'tile-number';
+                    numberElement.textContent = tile.value;
+                    
+                    const symbolElement = document.createElement('div');
+                    symbolElement.className = 'tile-symbol';
+                    const relevantSymbol = this.getRelevantOperationSymbol(tile);
+                    symbolElement.textContent = relevantSymbol;
+                    
+                    // Check if this tile can merge with any adjacent tile
+                    const canMergeWithAdjacent = this.hasMergeableAdjacent(tile, row, col);
+                    if (!canMergeWithAdjacent) {
+                        symbolElement.classList.add('dimmed');
+                    }
+                    
+                    tileElement.appendChild(numberElement);
+                    if (relevantSymbol) {
+                        tileElement.appendChild(symbolElement);
+                    }
                     
                     if (tile.merged) {
                         tileElement.classList.add('merged');

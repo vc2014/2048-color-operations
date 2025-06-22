@@ -137,15 +137,33 @@ body {
     width: 90px;
     height: 90px;
     border-radius: 6px;
-    font-size: 2rem;
     font-weight: bold;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     color: white;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     transition: all 0.15s ease-in-out;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tile-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.tile-symbol {
+    font-size: 1rem;
+    font-weight: normal;
+    opacity: 0.9;
+    margin-top: 2px;
+    transition: opacity 0.2s ease;
+}
+
+.tile-symbol.dimmed {
+    opacity: 0.4;
 }
 
 .tile.addition {
@@ -332,7 +350,14 @@ body {
     .grid-cell, .tile {
         width: 70px;
         height: 70px;
-        font-size: 1.5rem;
+    }
+    
+    .tile-number {
+        font-size: 1.4rem;
+    }
+    
+    .tile-symbol {
+        font-size: 0.8rem;
     }
     
     .legend-items {
